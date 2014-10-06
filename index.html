@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Sew Carla</title>
+<link href="//fonts.googleapis.com/css?family=Cabin:400italic,400,500italic,500,600italic,600,700italic,700|Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- Add fancyBox -->
+<link rel="stylesheet" href="fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+    
+	<script type="text/javascript">
+		var bound = 0;
+		
+		// gets the next 4 images in the "images" directory and their thumbnails
+		function getNextImages(){
+			$.ajax({
+				type: "POST",
+				url: "get_imgs.php",
+				data: { bound1: bound, bound2: bound+4 }
+			}).done(function(response) {
+			//Parse JSON
+			$.each($.parseJSON(response), function(image, thumbnail) {
+				if(image !== "" && thumbnail !== "") {
+					$("#imagelist").append('<a class="fancybox preview" rel="group" href="'+image+'"><img src="'+thumbnail+'" alt="" /></a>');
+				}
+				else { // hide the button if no images left
+					$("#more").hide();
+				}
+			});
+			bound = bound + 4;
+		});
+	}
+		
+	$( document ).ready(function() {
+		$(".fancybox").fancybox(); 
+		$('body').hide().fadeIn('slow'); // fade effect
+		getNextImages();
+			
+		$("#more").click(function(event) {
+			getNextImages();
+		});
+	});
+	</script>
+
+
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body, html {
+        height: 100%;
+    }
+    
+    body {
+        font-family: Cabin, verdana, sans-serif;
+        color: #111111;
+        background-image:url('img/xv.png');
+    }
+	
+	h1 { 
+		font-family: Raleway, sans-serif;
+		font-size: 2em;	
+		margin-left: 10%;
+		text-shadow: 1px 1px #EAB6D5;
+	}
+	
+    #header {
+        height: 35px;
+        padding: 10px;
+        background-color: #EAB6D5;
+		background: -webkit-linear-gradient(#EAB6D5, #B97CA0); /* For Safari 5.1 to 6.0 */
+  		background: -o-linear-gradient(#EAB6D5, #B97CA0); /* For Opera 11.1 to 12.0 */
+  		background: -moz-linear-gradient(#EAB6D5, #B97CA0); /* For Firefox 3.6 to 15 */
+  		background: linear-gradient(#EAB6D5, #B97CA0); /* Standard syntax */
+        font-family: Merriweather, serif;
+    }
+	
+	#imagelist {
+		width: 100%;
+	}
+	
+	.preview {
+		width: 25%;
+		display: inline-block;
+	}
+	
+	.preview img {
+		border-radius: 100%;
+		-webkit-filter: grayscale(1); 
+  		-webkit-filter: grayscale(100%); 
+  		-moz-filter: grayscale(100%);
+		filter: gray; filter: grayscale(100%);
+		filter: url(desaturate.svg#greyscale);	
+	}
+	
+	.preview img:hover {
+  		-webkit-filter: grayscale(0); 
+  		-webkit-filter: grayscale(0%); 
+  		-moz-filter: grayscale(0%);
+  		filter: gray; filter: grayscale(0%);
+  		filter: url(desaturate.svg#greyscale);	
+	}
+	    	    
+    #content {
+		text-align: center;
+        background-color:rgba(255, 255, 255, 0.6);
+		border-left: solid 3px #ccc;
+		border-right: solid 3px #ccc;
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+        height: 100%;
+		padding: 20px;
+    }
+    
+    
+    #nav {
+		display: inline;
+        width: 100%;
+		padding: 0;
+		float: left;
+    }
+    
+    #nav li {
+        display: inline-block;
+		margin: 0;
+		padding: 0;
+    }
+    
+    #nav li a {
+        background-color: #fff;
+		padding:20px 40px 4px 10px;
+		float:left;
+		width:auto;
+        color: #000;
+        text-decoration: none;
+        
+    }
+</style>
+    
+</head>
+
+<body>
+    <div id="header">
+        <h1 style="display:inline">Sew Carla</h1>
+	</div>
+	
+    <div id="content">            
+			<div id="imagelist">
+				
+            </div>
+					
+        <br /><br />
+        <div style="clear:both"><button name="more" id="more">Load more...</button></div>
+    </div>
+</body>   
+</html>
